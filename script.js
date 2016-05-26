@@ -3,13 +3,14 @@ jQuery.noConflict();
 (function( $ ) {
   $(function() {
 
-    var state = localStorage.getItem('issueTacker');
+    // var state = localStorage.getItem('issueTacker');
+    loadIssue(212);
 
-    if(state != null){
-    	    $('body').empty();
-    		$('body').append(state);
-    		$('.todoItem.done').find('input:checkbox').attr('checked', true);
-    }
+    // if(state != null){
+    // 	    $('body').empty();
+    // 		$('body').append(state);
+    // 		$('.todoItem.done').find('input:checkbox').attr('checked', true);
+    // }
 
     $('.datepicker').datepicker('option', {dateFormat: 'yy-mm-dd' });
   	var formArray = [];
@@ -86,6 +87,23 @@ jQuery.noConflict();
    })
   }
 
+  function deleteRest(issue) {
+    $.ajax
+   ({
+       type: "DELETE",
+       //url: 'http://zhaw-weng-api.herokuapp.com/api/project/' + issue.project_id + '/issues',
+       url: 'http://zhaw-weng-api.herokuapp.com/api/project/212/issues/' + issue.id,
+       dataType: 'json',
+       contentType: 'application/json',
+       async: false,
+       //json object to sent to the authentication url
+       data: JSON.stringify(issue),
+       success: function () {
+         console.log( 'issue deleted. id='+ issue.id);
+       }
+   })
+  }
+
 function printIssue (issue) {
     console.log("print " + issue.title);
     var issueRow = '<tr class="todoItem"> <td><input type="checkbox" name="bla" id=' + issue.id + ' /></td> <td>' + issue.title + '</td> <td>' + issue.due_date + '</td> <td><img id="bin" class="delete" src="bin.png"></td> </tr>';
@@ -106,25 +124,57 @@ function printIssue (issue) {
 			$(this).parents('.todoItem').toggleClass('done');
       var issue = JSON.parse(localStorage.getItem("n"+this.id));
       issue.done = !issue.done;
+      // update localStorage
       localStorage.setItem("n"+issue.id, JSON.stringify(issue));
       // call REST to update
       putUpdate(issue);
 
-			localStorage.setItem('issueTacker', document.body.innerHTML);
       console.log("2-bind Done");
-//      console.log(document.body.innerHTML);
 		});
   	}
 
 
   	function bindDelete(){
 		$( ".todoItem .delete" ).on('click', function(){
-			$(this).parents('.todoItem').remove();
-			localStorage.setItem('issueTacker', document.body.innerHTML);
+      // get id
+      var id = this.parentNode.parentNode.getElementsByTagName("input")[0].id;
+
+      // get issue
+      var issue = JSON.parse(localStorage.getItem("n"+id));
+      // call REST to delete
+      deleteRest(issue);
+      // remove from page
+      $(this).parents('.todoItem').remove();
+      // remove in local Storage
+      localStorage.removeItem("n"+id);
+
       console.log("3- bind Delete");
-//      console.log(document.body.innerHTML);
 		});
   	}
 
   });
+
+  function loadIssue (projectId) {
+    $.ajax
+   ({
+       type: "GET",
+       url: 'http://zhaw-weng-api.herokuapp.com/api/project/'+projectId+'/issues',
+       dataType: 'json',
+       contentType: 'application/json',
+       async: false,
+       success: function (response) {
+         for (var i in response) {
+           console.log(response[i]);
+           // printIssue(response[i]);
+         }
+         console.log( 'issues created.');
+       }
+   })
+  }
+
 })(jQuery);
+
+
+  function clickSave() {
+    loadIssue(212);
+  }
