@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Todo List</title>
+	<meta charset="utf-8"/>
+
+	<script src="jquery.js" ></script>
+	<script src="jquery-ui.min.js" ></script>
+	<script src="script.js"></script>
+
+	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="jquery-ui.min.css" type="text/css" rel="stylesheet">
+	<link href="Style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+<img class="bildhoehe" id="checkbox" src="checkbox.svg" height="50px">
+<p id="title">Issue Tracker</p>
+<nav class="navbar navbar-default navbar-static-top">
+	<ul class="nav navbar-nav">
+		<li><a href="">Home</a></li>
+		<li><a href="">About</a></li>
+		<li><a href="">Contact</a></li>
+	</ul>
+</nav>
+
+<section id="Content" class="Content container">
+
+	<div class="row">
+
+
+		<br>
+		<br>
+		<img id="document" src="document.svg">
+		<input type="text" value="" placeholder="Project" id="eingabefeld">
+		<button id="buttonProjectNameSave" type="button">Save Project</button>
+		<br>
+		<br>
+		<form id="createIssue">
+			<div class="form-groups">
+				<div class="col-md-3">
+					<select class="form-control">
+						<option value="Priority">Priority</option>
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<input id="datepicker" name="date" class="form-control"  value="">
+				</div>
+				<div class="col-md-3">
+					<input class="form-control" name="title" type="text" placeholder="Enter the issue">
+				</div>
+				<div class="col-md-3">
+					<input class="form-control" type="submit" value="Create Issue">
+				</div>
+			</div>
+		</form>
+		<br>
+		<br>
+		<br>
+		<div id="issueline">
+			<table>
+				<tr>
+					<td><img id="liste" src="list.png"></td>
+					<th>Issues</th>
+				</tr>
+			</table>
+		</div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<div id="todolist">
+			<table class="tabelle" cellspacing="0" cellpadding="0" border="0px" width="100%">
+				<tr class="todoItem">
+					<td><input type="checkbox" name="bla" /></td>
+					<td>Learn me some HTML and CSS</td>
+					<td>2016-03-21</td>
+					<td><img id="bin" class="delete" src="bin.png"></td>
+				</tr>
+			</table>
+		</div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+	</div>
+
+
+	</div>
+
+</section>
+<div id="footer">
+	<nav id="navigation2">
+		<a href="">Privacy</a> &#124
+		<a href="">Terms and Conditions</a> &#124
+		<a href="">Feedback</a>
+	</nav>
+</div>
+</div>
+
+
+</body>
+
+</html>

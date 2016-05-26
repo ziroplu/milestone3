@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>To Do List</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="Stylesheet.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	
+</head>
+
+<body>
+	<div class="page-header"> 
+		<nav class="navigation" >
+			<ul class="navigation">
+
+			<li>
+			<a href="#" >
+		      <img class="img-responsive img-rounded" style="height: 23px" src="To-Do-App-Logo.png" alt="logo"/>
+		    </a>
+			</li>
+				<li><a href="Home">Home</a></li>
+				<li><a href="About">About</a></li>
+				<li><a href="Contact">Contact</a></li>
+			</ul>
+		</nav>
+	<!-- Title-->
+		<div class="col-md-12 Logo" >
+			<i href="#" class="thumbnail" style="background-image:url("hintergrund.png")">
+		      <img class="img-responsive img-rounded" style="height: 500px" src="mann2.jpg" alt="relaxing_image"/>
+		    </i>
+		</div>
+	<div>
+	<!-- Main-->
+	<div class="jumbotron">
+		<div class=" col-md-offset-1 col-lg-offset-1">
+			
+			<div id=divMainContainer class="col-sm-12 col-md-10 col-lg-10 input-group div_body" >
+			<input type=hidden  id="inputHidden">
+			<button id="buttonProjectNameSave" type="button" style="height: 29px;width: 29px;padding: 0" class="btn btn-default" aria-label="Left Align">
+					 <span class="glyphicon glyphicon-folder-open" style="color:green"  aria-hidden="true"></span>
+			 </button>
+			  <input id="inputProjectName" type="text" placeholder="Project name">
+			  <select id="selectPriority" class="element_mid" style="height: 25px;">
+						    <option value="1">1</option>
+						    <option value="2">2</option>
+						    <option value="3">3</option>
+			   </select>
+
+			   <input id="datepicker" type="date" class="datepicker element_mid" maxlength="50">
+			   <input id="inputIssueName" type="search" name="task search" placeholder="Enter the issue" class="task element_mid" maxlength="50">
+			   <button id="buttonSaveIssue" type="button" style="height: 29px;width: 29px;padding: 0" class="btn btn-default" aria-label="Left Align">
+					  <span class="glyphicon glyphicon-floppy-saved" style="color:green"  aria-hidden="true"></span>
+				</button>
+
+				<!--
+				<table id="tableIssues" class="table">
+				    <thead>
+				      <tr>
+				        <th>Issues</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+
+				      <tr class="success">
+				        <td class="col-md-1 col-lg-1 col-sm-1"> <input type="checkbox"></td>
+				        <td class="col-md-4 col-lg-4 col-sm-4">Make the dishes.</td>
+				        <td class="col-md-4 col-lg-4 col-sm-4">14.12.1002Z32:21:34</td>
+				        <td class="col-md-1 col-lg-1 col-sm-1" style="text-align: right">
+						    <button type="button" style="height: 29px;width: 29px;padding: 0" class="btn btn-default" aria-label="Left Align">
+								 <span class="glyphicon glyphicon-trash"   aria-hidden="true"></span>
+							</button>
+				        </td>
+				      </tr>
+				      <tr class="danger">
+				        <td class="col-md-1 col-lg-1 col-sm-1"> <input type="checkbox"></td>
+				        <td class="col-md-4 col-lg-4 col-sm-4">Make the dishes.</td>
+				        <td class="col-md-4 col-lg-4 col-sm-4">14.12.1002Z32:21:34</td>
+				        <td class="col-md-1 col-lg-1 col-sm-1" style="text-align: right">
+					         <button type="button" style="height: 29px;width: 29px;padding: 0;" class="btn btn-default" aria-label="Left Align">
+							 <span class="glyphicon glyphicon-trash"   aria-hidden="true"></span>
+							</button>
+				        </td>
+				      </tr>
+				      <tr class="info">
+				        <td class="col-md-1 col-lg-1 col-sm-1"> <input type="checkbox"></td>
+				        <td class="col-md-4 col-lg-4 col-sm-4">Make the dishes.</td>
+				        <td class="col-md-4 col-lg-4 col-sm-4">14.12.1002Z32:21:34</td>
+				        <td class="col-md-1 col-lg-1 col-sm-1" style="text-align: right">
+					         <button type="button" style="height: 29px;width: 29px;padding: 0" class="btn btn-default" aria-label="Left Align">
+							 	<span class="glyphicon glyphicon-trash"   aria-hidden="true"></span>
+							</button>
+				        </td>
+				      </tr>
+				    </tbody>
+				</table>
+				-->
+			</div>
+		</div>
+	</div>
+</div>
+<!--
+<footer>
+<div>
+	<ul>
+	  <li>Privacy</li>
+	  <li>Terms an Condition</li>
+	  <li>Feedback</li>
+	</ul>
+</div>
+</footer>
+-->
+
+<script type="text/javascript">
+	var currentProjectId = 275;
+	var IssuesURL = 'http://zhaw-weng-api.herokuapp.com/api/project/'+currentProjectId+'/issues';
+	var ProjectURL = 'http://zhaw-weng-api.herokuapp.com/api/projects';
+
+	function saveProject(projectName){
+		//structure DTO
+		var DTO = {
+			  "id": 0,
+			  "title": projectName
+			};
+
+		$.ajax({
+		  dataType: "json",
+		  url: ProjectURL,
+		  data: JSON.stringify(DTO),
+		  contentType: "application/json; charset=utf-8",
+		  type: 'POST',
+		  success: function(data){
+		  	alert('your Project was saved.');
+		  	currentProjectId = data.id;
+		  	
+
+		  	//reload
+		  	location.reload();
+		  }
+		});
+
+	}
+  	function deleteIssue(id){
+		var deleteURL = IssuesURL+"/"+id;
+
+		$.ajax({
+		  dataType: "json",
+		  url: deleteURL,
+		  type: 'DELETE',
+		  success: function(){
+		  	alert('your Issue was deleted.');
+
+		  	//reload
+		  	location.reload();
+		  }
+		});
+  	}
+
+  	function updateIssue(id, isDone){
+  		//structure DTO
+		var selectedIssue = [];
+		var updateURL = IssuesURL + "/"+id;
+		var tempData = jQuery.parseJSON($('#inputHidden').val());
+		for(var i = 0; i < tempData.length; i++){
+			if(tempData[i].id == id)
+			{
+				selectedIssue = tempData[i];
+			}
+		}
+		var DTO = {
+			"client_id": selectedIssue.client_id, 
+			"done": isDone,
+			"title": selectedIssue.title,
+			"priority": selectedIssue.priority,
+			"due_date": selectedIssue.due_date
+		};
+
+		//call
+		$.ajax({
+		  dataType: "json",
+		  url: updateURL,
+		  data: JSON.stringify(DTO),
+		  contentType: "application/json; charset=utf-8",
+		  type: 'PUT',
+		  success: function(){
+		  	//alert('your Issue was updated.');
+		  }
+		});
+  	}
+
+
+  	function saveIssue(priority, dueDate, issueName){
+		//structure DTO 
+		var newId = getGuid();
+		var DTO = {
+			"client_id": newId, 
+			"done": false,
+			"title": issueName,
+			"priority": ""+priority,
+			"due_date": dueDate
+		};
+
+		//call restful API
+		$.ajax({
+		  dataType: "json",
+		  url: IssuesURL,
+		  data: JSON.stringify(DTO),
+		  contentType: "application/json; charset=utf-8",
+		  type: 'POST',
+		  success: function(){
+		  	alert('your Issue was saved.');
+
+		  	//reload
+		  	location.reload();
+		  }
+		});
+  	}
+  	function getGuid(){
+  		/*from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
+		function s4() {
+		    return Math.floor((1 + Math.random()) * 0x10000)
+		      .toString(16)
+		      .substring(1);
+		  }
+		  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+		    s4() + '-' + s4() + s4() + s4();
+	}
+
+	function getPriorityColor(priority){
+		var priorities = ["success","info","danger"];
+		return priorities[priority-1];
+	}
+
+	var tableHeaderString = "<table id=\"tableIssues\" class=\"table\"><thead><tr><th>Issues</th></tr></thead><tbody>";
+	var tableRowStringTemplate = "<tr id=\"tr{6}\"  class=\"{1}\"><td class=\"col-md-1 col-lg-1 col-sm-1\"> <input class=\"checkboxDone\" id=\"{5}\" type=\"checkbox\" {2}></td><td class=\"col-md-4 col-lg-4 col-sm-4\">{3}</td><td class=\"col-md-4 col-lg-4 col-sm-4\">{4}</td><td class=\"col-md-1 col-lg-1 col-sm-1\" style=\"text-align: right\"><button class=\"buttonDeleteIssue\" id=\"{5}\" type=\"button\" style=\"height: 29px;width: 29px;padding: 0\" class=\"btn btn-default\" aria-label=\"Left Align\"><span class=\"glyphicon glyphicon-trash\"   aria-hidden=\"true\"></span></button></td></tr>";
+	var tableFooderString = "</tbody></table>";
+
+	/*
+	
+	{1} == priority
+	{2} == done
+	{3} == IssueName
+	{4} == due_date
+	{5} == id
+	*/
+
+	$.ajax({
+	  dataType: "json",
+	  url: IssuesURL,
+	  type:'GET',
+	  success: function(data){
+	  	var tableRowsString = "";
+	  	for ( var i = 0; i < data.length; i++ ) {
+	  		var temp = data[i];
+	  		var isChecked = (temp.done)?"checked":"";
+	  		$('#inputHidden').val(JSON.stringify(data));
+		    tableRowsString += tableRowStringTemplate.replace("{1}",getPriorityColor(temp.priority)).replace("{2}",isChecked).replace("{3}",temp.title).replace("{4}",temp.due_date).replace("{5}",temp.id);
+		}
+	  	$('#divMainContainer').append(tableHeaderString+tableRowsString+tableFooderString);
+	  }
+	});
+
+	$( document ).ready(function() {
+  	$('#buttonSaveIssue').click(function(){
+  		//get data
+  		var priority = $('#selectPriority').val();
+  		var dueDate = $('#datepicker').val();
+  		var issueName = $('#inputIssueName').val();
+
+  		saveIssue(priority,dueDate,issueName);
+  	});
+
+  	$('#buttonProjectNameSave').click(function(){
+  		//get data
+  		var projectName = $('#inputProjectName').val();
+
+  		saveProject(projectName);
+  	});
+
+  	$('body').on('click', '.buttonDeleteIssue', function () {
+  		//get data
+ 		var toDelete = this.id;
+
+ 		deleteIssue(toDelete);
+	});
+
+	$('body').on('click', '.checkboxDone', function () {
+  		//get data
+ 		var toUpdate = this.id;
+ 		var isChecked = this.checked;
+ 		updateIssue(toUpdate,isChecked);
+	});
+});
+	
+
+  </script>
+
+</body>
+</html>
