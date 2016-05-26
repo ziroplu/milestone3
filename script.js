@@ -4,7 +4,6 @@ jQuery.noConflict();
   $(function() {
 
     // var state = localStorage.getItem('issueTacker');
-    loadIssue(212);
 
     // if(state != null){
     // 	    $('body').empty();
@@ -12,32 +11,28 @@ jQuery.noConflict();
     // 		$('.todoItem.done').find('input:checkbox').attr('checked', true);
     // }
 
-    $('.datepicker').datepicker('option', {dateFormat: 'yy-mm-dd' });
+    //$('.datepicker').datepicker('option', {dateFormat: 'yy-mm-dd' });
+    $('#datepicker').datepicker({dateFormat: 'yy-mm-dd' });
   	var formArray = [];
 
-	bindDone();
-	bindDelete()
+    loadIssue(214);
 
   	$('#createIssue').on('submit', function(e){
       formArray = $(this).serializeArray();
 
   		var issue = {done:false};
       var noOfIssues = localStorage.getItem("noOfIssues");
-      if (noOfIssues==null) {
-        noOfIssues=1; // TODO replace with 0
-      }
       issue.id = noOfIssues++;
       localStorage.setItem("noOfIssues", noOfIssues);
 
-      issue.project_id = 212;
-      issue.client_id = "a75e9a4c-22d1-11e6-b67b-9e71128cae77";
+      issue.project_id = 214;
+      issue.client_id = guid();
       issue.done = false;
 
       // ugly
       issue.title = String(formArray[1]['value']);
       issue.priority = "2"; // TODO
       issue.due_date = String(formArray[0]['value']);
-      //issue.due_date = ddate + "T01:01:01.44.1Z"
 
       console.log("1 createIssue");
       console.log(issue);
@@ -45,17 +40,35 @@ jQuery.noConflict();
       postCreate(issue);
 
 
-//      console.log(document.body.innerHTML);
-
   		e.preventDefault();
   	});
+
+  function loadIssue (projectId) {
+    $.ajax
+   ({
+       type: "GET",
+       url: 'http://zhaw-weng-api.herokuapp.com/api/project/'+projectId+'/issues',
+       dataType: 'json',
+       contentType: 'application/json',
+       async: true,
+       success: function (response) {
+         localStorage.setItem("noOfIssues", response.length);
+         for (var i in response) {
+           var issue = response[i];
+           printIssue(issue);
+           localStorage.setItem("n"+issue.id, JSON.stringify(issue));
+         }
+         console.log('issues created. n=' + response.length);
+       }
+   });
+  }
 
   function postCreate(issue) {
     $.ajax
    ({
        type: "POST",
        //url: 'http://zhaw-weng-api.herokuapp.com/api/project/' + issue.project_id + '/issues',
-       url: 'http://zhaw-weng-api.herokuapp.com/api/project/212/issues',
+       url: 'http://zhaw-weng-api.herokuapp.com/api/project/214/issues',
        dataType: 'json',
        contentType: 'application/json',
        async: false,
@@ -75,7 +88,7 @@ jQuery.noConflict();
    ({
        type: "PUT",
        //url: 'http://zhaw-weng-api.herokuapp.com/api/project/' + issue.project_id + '/issues',
-       url: 'http://zhaw-weng-api.herokuapp.com/api/project/212/issues/' + issue.id,
+       url: 'http://zhaw-weng-api.herokuapp.com/api/project/214/issues/' + issue.id,
        dataType: 'json',
        contentType: 'application/json',
        async: false,
@@ -92,7 +105,7 @@ jQuery.noConflict();
    ({
        type: "DELETE",
        //url: 'http://zhaw-weng-api.herokuapp.com/api/project/' + issue.project_id + '/issues',
-       url: 'http://zhaw-weng-api.herokuapp.com/api/project/212/issues/' + issue.id,
+       url: 'http://zhaw-weng-api.herokuapp.com/api/project/214/issues/' + issue.id,
        dataType: 'json',
        contentType: 'application/json',
        async: false,
@@ -120,17 +133,20 @@ function printIssue (issue) {
 }
 
   	function bindDone(){
-	  	$( ".todoItem input:checkbox" ).on('click', function(){
-			$(this).parents('.todoItem').toggleClass('done');
-      var issue = JSON.parse(localStorage.getItem("n"+this.id));
-      issue.done = !issue.done;
-      // update localStorage
-      localStorage.setItem("n"+issue.id, JSON.stringify(issue));
-      // call REST to update
-      putUpdate(issue);
+	  	$( ".todoItem input:checkbox" ).on('click',
+        function(){
+    			$(this).parents('.todoItem').toggleClass('done');
 
-      console.log("2-bind Done");
-		});
+          var issue = JSON.parse(localStorage.getItem("n"+this.id));
+          issue.done = !issue.done;
+
+          // update localStorage
+          localStorage.setItem("n"+issue.id, JSON.stringify(issue));
+          // call REST to update
+          putUpdate(issue);
+
+          console.log("2-bind Done");
+    		});
   	}
 
 
@@ -154,27 +170,14 @@ function printIssue (issue) {
 
   });
 
-  function loadIssue (projectId) {
-    $.ajax
-   ({
-       type: "GET",
-       url: 'http://zhaw-weng-api.herokuapp.com/api/project/'+projectId+'/issues',
-       dataType: 'json',
-       contentType: 'application/json',
-       async: false,
-       success: function (response) {
-         for (var i in response) {
-           console.log(response[i]);
-           // printIssue(response[i]);
-         }
-         console.log( 'issues created.');
-       }
-   })
-  }
+    function guid() {
+      function s4() {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      }
+      return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+        s4() + '-' + s4() + s4() + s4();
+    }
 
 })(jQuery);
-
-
-  function clickSave() {
-    loadIssue(212);
-  }
