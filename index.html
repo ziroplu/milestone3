@@ -31,14 +31,15 @@
 		<br>
 		<br>
 		<img id="document" src="document.svg">
-		<input type="text" value="" placeholder="Project" id="eingabefeld">
+		<input type="text" value="" placeholder="Project" id="eingabefeld"><div id="projectId"></div>
 		<button id="buttonProjectNameSave" type="button">Save Project</button>
+		<button id="buttonProjectNameLoad" type="button">Load Project ID</button>
 		<br>
 		<br>
 		<form id="createIssue">
 			<div class="form-groups">
-				<div class="col-md-3">
-					<select class="form-control">
+				<div class="col-md-3" id="issuePrio">
+					<select class="form-control" id="issueSelect">
 						<option value="Priority">Priority</option>
 						<option value="1">1</option>
 						<option value="2">2</option>
@@ -49,7 +50,7 @@
 					<input id="datepicker" name="date" class="form-control"  value="">
 				</div>
 				<div class="col-md-3">
-					<input class="form-control" name="title" type="text" placeholder="Enter the issue">
+					<input class="form-control" id="issueText" name="title" type="text" placeholder="Enter the issue">
 				</div>
 				<div class="col-md-3">
 					<input class="form-control" type="submit" value="Create Issue">
@@ -74,9 +75,9 @@
 		<br>
 		<br>
 		<div id="todolist">
-			<table class="tabelle" cellspacing="0" cellpadding="0" border="0px" width="100%">
+			<table id="issueTable" class="tabelle" cellspacing="0" cellpadding="0" border="0px" width="100%">
 				<tr class="todoItem">
-					<td><input type="checkbox" name="bla" class="hidden"/></td>
+					<td><input id="dummyId" type="checkbox" name="dummy" class="hidden"/></td>
 					<td></td>
 					<td></td>
 					<td></td>
